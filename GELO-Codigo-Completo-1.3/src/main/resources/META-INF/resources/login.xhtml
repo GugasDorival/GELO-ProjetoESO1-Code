@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Entrar | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/login.xhtml">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Entrar no GELO</h1>
+        <p class="muted">Gerenciamento Eletrônico de Livros e Opiniões.</p>
+        <h:form id="loginForm">
+            <h:messages id="resumoErros" globalOnly="false" layout="list"
+                        styleClass="validation-summary" errorClass="field-error" />
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" label="E-mail" value="#{loginBean.email}" required="true"
+                             requiredMessage="O e-mail deve ser preenchido." maxlength="160"
+                             autocomplete="username">
+                    <f:validateRegex pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                     validatorMessage="Informe um endereço de e-mail válido." />
+                </h:inputText>
+                <h:message for="email" errorClass="field-error" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Senha" />
+                <h:inputSecret id="senha" label="Senha" value="#{loginBean.senha}" required="true"
+                               requiredMessage="A senha deve ser preenchida." maxlength="20"
+                               autocomplete="current-password" />
+                <h:message for="senha" errorClass="field-error" />
+            </div>
+            <div class="actions">
+                <h:commandButton value="Entrar" action="#{loginBean.entrar}" />
+                <h:link outcome="cadastro" value="Criar uma conta" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+</main>
+<footer>GELO · Protótipo acadêmico</footer>
+</h:body>
+</html>

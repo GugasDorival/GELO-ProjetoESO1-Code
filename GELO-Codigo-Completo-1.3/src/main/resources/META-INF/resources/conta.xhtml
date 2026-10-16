@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.exigirAutenticacao}" />
+    <f:event type="preRenderView" listener="#{usuarioBean.carregarMinhaConta}" />
+</f:metadata>
+<h:head>
+    <title>Minha conta | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <style>
+        .validation-summary { color: #a42f36; background: #fbe9e9; border: 1px solid #efcaca; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; }
+        .field-error { color: #a42f36; display: block; font-size: .92rem; margin-top: 4px; }
+        .field-hint { color: #5c6d65; font-size: .9rem; }
+    </style>
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Minha conta</h1>
+        <p class="muted">Altere seu nome, e-mail ou senha. Deixe a senha vazia para manter a senha atual.</p>
+        <h:form id="contaForm">
+            <h:messages id="errosConta" globalOnly="false" layout="list"
+                        styleClass="validation-summary" errorClass="field-error" />
+            <div class="field">
+                <h:outputLabel for="nome" value="Nome" />
+                <h:inputText id="nome" label="Nome" value="#{usuarioBean.nomeConta}" required="true"
+                             requiredMessage="O nome deve ser preenchido." maxlength="100">
+                    <f:validateLength minimum="2" maximum="100" validatorMessage="O nome deve ter entre 2 e 100 caracteres." />
+                </h:inputText>
+                <h:message for="nome" errorClass="field-error" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" label="E-mail" value="#{usuarioBean.emailConta}" required="true"
+                             requiredMessage="O e-mail deve ser preenchido." maxlength="160">
+                    <f:validateRegex pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" validatorMessage="Informe um endereço de e-mail válido." />
+                </h:inputText>
+                <h:message for="email" errorClass="field-error" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Nova senha (opcional)" />
+                <h:inputSecret id="senha" label="Nova senha" value="#{usuarioBean.senhaConta}" maxlength="20" />
+                <h:message for="senha" errorClass="field-error" />
+                <span class="field-hint">Deixe em branco para manter a senha atual. Se informar uma nova senha, use de 6 a 20 caracteres.</span>
+            </div>
+            <div class="actions">
+                <h:commandButton value="Salvar alterações" action="#{usuarioBean.salvarMinhaConta}" />
+                <h:link outcome="home" value="Voltar" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+    <section class="card narrow">
+        <h2>Excluir minha conta</h2>
+        <p class="muted">Esta operação é permanente. O sistema impede a exclusão do último administrador.</p>
+        <h:form>
+            <h:commandButton value="Excluir minha conta" action="#{usuarioBean.excluirMinhaConta}"
+                             styleClass="danger"
+                             onclick="return confirm('Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.');" />
+        </h:form>
+    </section>
+</main>
+<footer>GELO · Protótipo acadêmico</footer>
+</h:body>
+</html>

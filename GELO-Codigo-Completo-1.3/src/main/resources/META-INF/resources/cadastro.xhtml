@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Criar conta | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <style>
+        .validation-summary { color: #a42f36; background: #fbe9e9; border: 1px solid #efcaca; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; }
+        .field-error { color: #a42f36; display: block; font-size: .92rem; margin-top: 4px; }
+        .field-hint { color: #5c6d65; font-size: .9rem; }
+        input[aria-invalid="true"] { border-color: #a42f36; }
+    </style>
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/login.xhtml">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Criar conta de leitor</h1>
+        <p class="muted">Preencha os campos abaixo para criar sua conta. O cadastro público cria uma conta de leitor.</p>
+        <h:form id="cadastroForm">
+            <h:messages id="resumoErros" globalOnly="false" layout="list"
+                        styleClass="validation-summary" errorClass="field-error"
+                        infoClass="field-hint" warnClass="field-hint" fatalClass="field-error" />
+            <div class="field">
+                <h:outputLabel for="nome" value="Nome" />
+                <h:inputText id="nome" label="Nome" value="#{usuarioBean.novoNome}"
+                             required="true" requiredMessage="O nome deve ser preenchido."
+                             maxlength="100" autocomplete="name">
+                    <f:validateLength minimum="2" maximum="100"
+                                      validatorMessage="O nome deve ter entre 2 e 100 caracteres." />
+                </h:inputText>
+                <h:message for="nome" errorClass="field-error" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" label="E-mail" value="#{usuarioBean.novoEmail}"
+                             required="true" requiredMessage="O e-mail deve ser preenchido."
+                             maxlength="160" autocomplete="email">
+                    <f:validateRegex pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                     validatorMessage="Informe um endereço de e-mail válido." />
+                </h:inputText>
+                <h:message for="email" errorClass="field-error" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Senha" />
+                <h:inputSecret id="senha" label="Senha" value="#{usuarioBean.novaSenha}"
+                               required="true" requiredMessage="A senha deve ser preenchida."
+                               maxlength="20" autocomplete="new-password">
+                    <f:validateLength minimum="6" maximum="20"
+                                      validatorMessage="A senha deve ter entre 6 e 20 caracteres." />
+                </h:inputSecret>
+                <h:message for="senha" errorClass="field-error" />
+                <span class="field-hint">Use de 6 a 20 caracteres.</span>
+            </div>
+            <div class="actions">
+                <h:commandButton value="Criar conta" action="#{usuarioBean.registrarLeitor}" />
+                <h:link outcome="login" value="Voltar ao login" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+</main>
+<footer>GELO · Protótipo acadêmico</footer>
+</h:body>
+</html>

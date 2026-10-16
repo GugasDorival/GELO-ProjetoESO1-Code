@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.exigirAutenticacao}" />
+</f:metadata>
+<h:head>
+    <title>Página inicial | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<main>
+    <section class="card">
+        <h1>Olá, <h:outputText value="#{loginBean.usuarioLogado.nome}" />!</h1>
+        <p>Você está conectado ao GELO. Este protótipo implementa os casos de uso <strong>Login</strong> e <strong>Manter usuário</strong>.</p>
+        <p>Perfil: <span class="badge"><h:outputText value="#{loginBean.usuarioLogado.tipoUsuario}" /></span></p>
+        <div class="links">
+            <h:link outcome="conta" value="Minha conta" />
+            <h:panelGroup rendered="#{loginBean.administrador}">
+                <h:link outcome="usuarios" value="Gerenciar usuários" />
+            </h:panelGroup>
+        </div>
+        <h:form>
+            <h:commandButton value="Sair" action="#{loginBean.sair}" styleClass="secondary" />
+        </h:form>
+    </section>
+    <section class="card">
+        <h2>Sobre este protótipo</h2>
+        <p class="muted">A página inicial concentra informações de conta. Catálogo, estante e análises poderão ser integrados em etapas posteriores.</p>
+    </section>
+</main>
+<footer>GELO · Protótipo acadêmico</footer>
+</h:body>
+</html>
