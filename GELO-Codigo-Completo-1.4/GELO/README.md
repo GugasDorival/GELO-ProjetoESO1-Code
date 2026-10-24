@@ -21,7 +21,7 @@ Aplicação web GELO com os casos de uso **Manter usuário** e **Login**, alinha
 4. Depois de `BUILD SUCCESS`, clique com o botão direito no projeto e selecione **Run**. O arquivo `nbactions.xml` vincula a ação Run Project às metas `process-classes` e `spring-boot:run`, evitando a configuração genérica `exec:exec`.
 5. Na primeira execução, o Maven pode baixar dependências; aguarde a inicialização do servidor na janela **Output**.
 
-O projeto usa Spring Boot com Tomcat embutido. Não o copie para a pasta `webapps` de uma instalação externa do Tomcat 9. Depois de iniciar, abra <http://localhost:8080/>. A raiz mostra a página pública inicial; use **Entrar** para ir ao login ou **Criar conta** para abrir o cadastro. O mapeamento JSF também é configurado para atender a `/login.xhtml` e `/faces/login.xhtml`.
+O projeto usa Spring Boot com Tomcat embutido. Não o copie para a pasta `webapps` de uma instalação externa do Tomcat 9. Depois de iniciar, abra <http://localhost:8081/>. A raiz mostra a página pública inicial; use **Entrar** para ir ao login ou **Criar conta** para abrir o cadastro. O mapeamento JSF também é configurado para atender a `/login.xhtml` e `/faces/login.xhtml`.
 
 Se o NetBeans já tiver uma ação personalizada de Run armazenada localmente, confira em **Project Properties > Actions > Run project** se o campo **Execute Goals** está como `process-classes spring-boot:run` e deixe **Set Properties** vazio.
 
