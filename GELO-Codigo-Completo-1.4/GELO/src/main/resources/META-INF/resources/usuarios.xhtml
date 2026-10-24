@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.exigirAdministrador}" />
+    <f:event type="preRenderView" listener="#{usuarioBean.carregarUsuarios}" />
+</f:metadata>
+<h:head>
+    <title>Gerenciar usuários | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<main>
+    <section class="card">
+        <h1>Gerenciar usuários</h1>
+        <p class="muted">Somente administradores podem acessar esta página. Os cadastros criados aqui também serão do tipo LEITOR; o perfil administrativo não é escolhido no formulário.</p>
+        <h:messages globalOnly="true" layout="list" styleClass="messages" infoClass="success-message" />
+    </section>
+
+    <section class="card">
+        <h2>Cadastrar leitor</h2>
+        <h:form id="novoUsuarioForm">
+            <div class="field">
+                <h:outputLabel for="nomeNovo" value="Nome" />
+                <h:inputText id="nomeNovo" value="#{usuarioBean.novoNome}" required="true" maxlength="100" />
+                <h:message for="nomeNovo" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="emailNovo" value="E-mail" />
+                <h:inputText id="emailNovo" value="#{usuarioBean.novoEmail}" required="true" maxlength="160" />
+                <h:message for="emailNovo" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senhaNova" value="Senha (6 a 20 caracteres)" />
+                <h:inputSecret id="senhaNova" value="#{usuarioBean.novaSenha}" required="true" maxlength="20" />
+                <h:message for="senhaNova" />
+            </div>
+            <h:commandButton value="Cadastrar leitor" action="#{usuarioBean.criarLeitorPeloAdministrador}" />
+        </h:form>
+    </section>
+
+    <section class="card">
+        <h2>Contas cadastradas</h2>
+        <div class="table-wrap">
+            <h:form id="listaUsuariosForm">
+                <h:dataTable value="#{usuarioBean.usuarios}" var="usuario">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        <h:outputText value="#{usuario.id}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Nome</f:facet>
+                        <h:outputText value="#{usuario.nome}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">E-mail</f:facet>
+                        <h:outputText value="#{usuario.email}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Perfil</f:facet>
+                        <h:outputText value="#{usuario.tipoUsuario}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <div class="actions">
+                            <h:commandButton value="Editar" action="#{usuarioBean.selecionarParaEditar(usuario.id)}"
+                                             styleClass="secondary" disabled="#{usuario.id eq loginBean.idUsuarioLogado}" />
+                            <h:commandButton value="Excluir" action="#{usuarioBean.excluirUsuario(usuario.id)}"
+                                             styleClass="danger" disabled="#{usuario.id eq loginBean.idUsuarioLogado}"
+                                             onclick="return confirm('Deseja realmente excluir esta conta?');" />
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </div>
+    </section>
+
+    <h:panelGroup layout="block" styleClass="card" rendered="#{usuarioBean.usuarioEditandoId ne null}">
+        <h2>Editar conta selecionada</h2>
+        <p class="muted">A senha não é exibida. Informe uma nova senha somente se quiser alterá-la.</p>
+        <h:form id="editarUsuarioForm">
+            <div class="field">
+                <h:outputLabel for="nomeEdicao" value="Nome" />
+                <h:inputText id="nomeEdicao" value="#{usuarioBean.nomeEdicao}" required="true" maxlength="100" />
+                <h:message for="nomeEdicao" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="emailEdicao" value="E-mail" />
+                <h:inputText id="emailEdicao" value="#{usuarioBean.emailEdicao}" required="true" maxlength="160" />
+                <h:message for="emailEdicao" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senhaEdicao" value="Nova senha (opcional)" />
+                <h:inputSecret id="senhaEdicao" value="#{usuarioBean.senhaEdicao}" maxlength="20" />
+                <h:message for="senhaEdicao" />
+            </div>
+            <div class="actions">
+                <h:commandButton value="Salvar alterações" action="#{usuarioBean.salvarEdicaoAdministrativa}" />
+                <h:commandButton value="Cancelar" action="#{usuarioBean.cancelarEdicaoAdministrativa}" immediate="true" styleClass="secondary" />
+            </div>
+        </h:form>
+    </h:panelGroup>
+
+    <section class="card">
+        <h:link outcome="home" value="Voltar para a página inicial" styleClass="button secondary" />
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>

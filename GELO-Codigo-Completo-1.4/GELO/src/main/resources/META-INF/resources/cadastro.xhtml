@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Criar conta | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Criar conta de leitor</h1>
+        <p class="muted">Gerenciamento Eletrônico de Livros e Opiniões.</p>
+        <h:messages globalOnly="true" layout="list" styleClass="messages" infoClass="success-message" />
+        <h:form id="cadastroForm">
+            <div class="field">
+                <h:outputLabel for="nome" value="Nome" />
+                <h:inputText id="nome" value="#{usuarioBean.novoNome}" required="true"
+                             requiredMessage="Informe seu nome." maxlength="100" autocomplete="name" />
+                <h:message for="nome" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" value="#{usuarioBean.novoEmail}" required="true"
+                             requiredMessage="Informe seu e-mail." maxlength="160" autocomplete="email" />
+                <h:message for="email" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Senha (6 a 20 caracteres)" />
+                <h:inputSecret id="senha" value="#{usuarioBean.novaSenha}" required="true"
+                               requiredMessage="Informe uma senha." maxlength="20" autocomplete="new-password" />
+                <h:message for="senha" />
+            </div>
+            <div class="actions">
+                <h:commandButton value="Criar conta" action="#{usuarioBean.registrarLeitor}" />
+                <h:link outcome="login" value="Voltar ao login" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>

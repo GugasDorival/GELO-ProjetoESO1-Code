@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Entrar | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Entrar no GELO</h1>
+        <p class="muted">Gerenciamento Eletrônico de Livros e Opiniões.</p>
+        <h:messages globalOnly="true" layout="list" styleClass="messages" infoClass="success-message" />
+        <h:form id="loginForm">
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" value="#{loginBean.email}" required="true"
+                             requiredMessage="Informe seu e-mail." maxlength="160"
+                             autocomplete="username" />
+                <h:message for="email" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Senha" />
+                <h:inputSecret id="senha" value="#{loginBean.senha}" required="true"
+                               requiredMessage="Informe sua senha." maxlength="20"
+                               autocomplete="current-password" />
+                <h:message for="senha" />
+            </div>
+            <div class="actions">
+                <h:commandButton value="Entrar" action="#{loginBean.entrar}" />
+                <h:link outcome="cadastro" value="Criar uma conta" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>

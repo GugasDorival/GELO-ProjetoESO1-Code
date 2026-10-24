@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.exigirAutenticacao}" />
+</f:metadata>
+<h:head>
+    <title>Página inicial | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<main>
+    <section class="card">
+        <h1>Olá, <h:outputText value="#{loginBean.usuarioLogado.nome}" />!</h1>
+        <p>Você está conectado ao GELO. A partir daqui, você pode acessar sua conta e gerenciar os usuários de acordo com seu perfil.</p>
+        <p>Perfil: <span class="badge"><h:outputText value="#{loginBean.usuarioLogado.tipoUsuario}" /></span></p>
+        <div class="links">
+            <h:link outcome="conta" value="Minha conta" />
+            <h:panelGroup rendered="#{loginBean.administrador}">
+                <h:link outcome="usuarios" value="Gerenciar usuários" />
+            </h:panelGroup>
+        </div>
+        <h:form>
+            <h:commandButton value="Sair" action="#{loginBean.sair}" styleClass="secondary" />
+        </h:form>
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>

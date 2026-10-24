@@ -1,0 +1,18 @@
+# Maven
+/target/
+
+# Banco local H2 e logs
+/data/*.mv.db
+/data/*.trace.db
+/logs/
+*.log
+
+# NetBeans e sistemas operacionais
+/nbproject/private/
+/build/
+/dist/
+/nbbuild/
+/.idea/
+*.iml
+.DS_Store
+Thumbs.db

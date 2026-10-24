@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.exigirAutenticacao}" />
+    <f:event type="preRenderView" listener="#{usuarioBean.carregarMinhaConta}" />
+</f:metadata>
+<h:head>
+    <title>Minha conta | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+</h:head>
+<h:body>
+
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<main>
+    <section class="card narrow">
+        <h1>Minha conta</h1>
+        <p class="muted">Altere seu nome, e-mail ou senha. Deixe a senha vazia para manter a senha atual.</p>
+        <h:messages globalOnly="true" layout="list" styleClass="messages" infoClass="success-message" />
+        <h:form id="contaForm">
+            <div class="field">
+                <h:outputLabel for="nome" value="Nome" />
+                <h:inputText id="nome" value="#{usuarioBean.nomeConta}" required="true"
+                             requiredMessage="Informe seu nome." maxlength="100" />
+                <h:message for="nome" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="email" value="E-mail" />
+                <h:inputText id="email" value="#{usuarioBean.emailConta}" required="true"
+                             requiredMessage="Informe seu e-mail." maxlength="160" />
+                <h:message for="email" />
+            </div>
+            <div class="field">
+                <h:outputLabel for="senha" value="Nova senha (opcional)" />
+                <h:inputSecret id="senha" value="#{usuarioBean.senhaConta}" maxlength="20" autocomplete="new-password" />
+                <h:message for="senha" />
+            </div>
+            <div class="actions">
+                <h:commandButton value="Salvar alterações" action="#{usuarioBean.salvarMinhaConta}" />
+                <h:link outcome="home" value="Voltar" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </section>
+    <section class="card narrow">
+        <h2>Excluir minha conta</h2>
+        <p class="muted">Esta operação é permanente. O sistema impede a exclusão do último administrador.</p>
+        <h:form>
+            <h:commandButton value="Excluir minha conta" action="#{usuarioBean.excluirMinhaConta}"
+                             styleClass="danger"
+                             onclick="return confirm('Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.');" />
+        </h:form>
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>
