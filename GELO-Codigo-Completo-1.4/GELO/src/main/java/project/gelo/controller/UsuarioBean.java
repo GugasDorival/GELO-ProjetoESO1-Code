@@ -103,6 +103,11 @@ public class UsuarioBean {
             mensagem(FacesMessage.SEVERITY_WARN, "Para editar sua própria conta, utilize a opção Minha conta.");
             return null;
         }
+        if (id == null) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Selecione uma conta válida.");
+            return null;
+        }
+
         try {
             UsuarioDTO usuario = usuarioService.buscarPorId(id);
             usuarioEditandoId = usuario.id();
@@ -176,8 +181,13 @@ public class UsuarioBean {
             redirecionar("/login.xhtml");
             return;
         }
-        if (!atual.id().equals(contaCarregadaPara)) {
-            UsuarioDTO dados = usuarioService.buscarPorId(atual.id());
+        Integer id = atual.id();
+        if (id == null) {
+            redirecionar("/login.xhtml");
+            return;
+        }
+        if (!id.equals(contaCarregadaPara)) {
+            UsuarioDTO dados = usuarioService.buscarPorId(id);
             nomeConta = dados.nome();
             emailConta = dados.email();
             senhaConta = "";

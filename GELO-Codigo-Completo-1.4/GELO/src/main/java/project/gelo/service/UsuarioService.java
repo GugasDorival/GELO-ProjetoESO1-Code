@@ -1,5 +1,6 @@
 package project.gelo.service;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +72,7 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioDTO buscarPorId(Integer id) {
+    public UsuarioDTO buscarPorId(@NonNull Integer id) {
         return UsuarioDTO.from(obterUsuario(id));
     }
 
@@ -128,7 +129,7 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    private Usuario obterUsuario(Integer id) {
+    private Usuario obterUsuario(@NonNull Integer id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("A conta selecionada não foi encontrada."));
     }
