@@ -1,7 +1,7 @@
 package project.gelo.dto;
 
 /**
- * Dados de um livro retornado pela busca no Google Books, prontos para exibição.
+ * Dados de um livro retornado pela busca no Google Books
  *
  * @param idGoogle      identificador do volume no Google Books
  * @param titulo        título (com subtítulo, quando houver)

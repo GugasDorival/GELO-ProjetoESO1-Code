@@ -33,7 +33,7 @@ public class LivroBean {
         this.googleBooksService = googleBooksService;
     }
 
-    /** Ação do formulário: redireciona para a página de resultados levando termo e tipo na URL. */
+    /** Ação do formulário: redireciona para a página de resultados levando termo e tipo na URL.*/
     public String pesquisar() {
         return "/view/html/livro/buscar.xhtml?faces-redirect=true&includeViewParams=true";
     }

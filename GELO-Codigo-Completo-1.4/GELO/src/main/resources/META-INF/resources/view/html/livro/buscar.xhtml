@@ -52,11 +52,15 @@
                 <ui:repeat value="#{livroBean.resultados}" var="livro">
                     <li class="book-item">
                         <ui:fragment rendered="#{livro.possuiCapa}">
-                            <img class="book-cover" src="#{livro.urlCapa}" alt="Capa de #{livro.titulo}"
-                                 loading="lazy" width="64" height="96" />
+                            <a href="livro.xhtml?faces-redirect=true">
+                                <img class="book-cover" src="#{livro.urlCapa}" alt="Capa de #{livro.titulo}"
+                                    loading="lazy" width="64" height="96" />
+                            </a>
                         </ui:fragment>
                         <ui:fragment rendered="#{not livro.possuiCapa}">
-                            <div class="book-cover book-cover-empty" aria-hidden="true">Sem capa</div>
+                            <a href="livro.xhtml?faces-redirect=true">
+                                <div class="book-cover book-cover-empty" aria-hidden="true">Sem capa</div>
+                            </a>
                         </ui:fragment>
                         <div class="book-info">
                             <h3><h:outputText value="#{livro.titulo}" /></h3>
