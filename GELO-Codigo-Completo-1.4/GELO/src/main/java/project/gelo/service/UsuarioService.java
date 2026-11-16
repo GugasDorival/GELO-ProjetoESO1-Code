@@ -46,7 +46,6 @@ public class UsuarioService {
         return UsuarioDTO.from(usuarioRepository.save(usuario));
     }
 
-    /** Autentica pelo e-mail e senha e retorna um DTO sem o hash de senha. */
     @Transactional(readOnly = true)
     public UsuarioDTO autenticar(String email, String senha) {
         if (email == null || email.isBlank() || senha == null || senha.isBlank()) {
@@ -76,11 +75,7 @@ public class UsuarioService {
         return UsuarioDTO.from(obterUsuario(id));
     }
 
-    /**
-     * O leitor só pode alterar os próprios dados. O administrador pode alterar contas.
-     * A troca de perfil não é oferecida por esta operação: cadastros normais são LEITOR;
-     * contas ADMINISTRADOR são criadas pela configuração inicial do sistema.
-     */
+
     public UsuarioDTO atualizar(Integer id, String nome, String email, String novaSenha,
                                 Integer idSolicitante, boolean solicitanteAdministrador) {
         if (id == null) {
@@ -109,7 +104,7 @@ public class UsuarioService {
         return UsuarioDTO.from(usuarioRepository.save(usuario));
     }
 
-    /** O leitor só exclui a própria conta; o administrador pode excluir outras contas. */
+
     public void excluir(Integer id, Integer idSolicitante, boolean solicitanteAdministrador) {
         if (id == null) {
             throw new IllegalArgumentException("Selecione uma conta válida.");

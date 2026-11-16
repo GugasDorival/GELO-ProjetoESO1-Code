@@ -3,17 +3,17 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core">
 <f:metadata>
-    <f:event type="preRenderView" listener="#{loginBean.exigirAutenticacao}" />
+    <f:event type="preRenderView" listener="#{entrarBean.exigirAutenticacao}" />
     <f:event type="preRenderView" listener="#{usuarioBean.carregarMinhaConta}" />
 </f:metadata>
 <h:head>
     <title>Minha conta | GELO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
 </h:head>
 <h:body>
 
-<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/view/html/usuario/perfil.xhtml">GELO</a></header>
 <main>
     <section class="card narrow">
         <h1>Minha conta</h1>
@@ -39,7 +39,7 @@
             </div>
             <div class="actions">
                 <h:commandButton value="Salvar alterações" action="#{usuarioBean.salvarMinhaConta}" />
-                <h:link outcome="home" value="Voltar" styleClass="button secondary" />
+                <h:link outcome="/view/html/usuario/perfil" value="Voltar" styleClass="button secondary" />
             </div>
         </h:form>
     </section>

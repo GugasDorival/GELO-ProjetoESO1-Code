@@ -5,7 +5,7 @@
 <h:head>
     <title>Entrar | GELO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
 </h:head>
 <h:body>
 <header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a></header>
@@ -17,21 +17,21 @@
         <h:form id="loginForm">
             <div class="field">
                 <h:outputLabel for="email" value="E-mail" />
-                <h:inputText id="email" value="#{loginBean.email}" required="true"
+                <h:inputText id="email" value="#{entrarBean.email}" required="true"
                              requiredMessage="Informe seu e-mail." maxlength="160"
                              autocomplete="username" />
                 <h:message for="email" />
             </div>
             <div class="field">
                 <h:outputLabel for="senha" value="Senha" />
-                <h:inputSecret id="senha" value="#{loginBean.senha}" required="true"
+                <h:inputSecret id="senha" value="#{entrarBean.senha}" required="true"
                                requiredMessage="Informe sua senha." maxlength="20"
                                autocomplete="current-password" />
                 <h:message for="senha" />
             </div>
             <div class="actions">
-                <h:commandButton value="Entrar" action="#{loginBean.entrar}" />
-                <h:link outcome="cadastro" value="Criar uma conta" styleClass="button secondary" />
+                <h:commandButton value="Entrar" action="#{entrarBean.entrar}" />
+                <h:link outcome="/view/html/usuario/cadastrar" value="Criar uma conta" styleClass="button secondary" />
             </div>
         </h:form>
     </section>

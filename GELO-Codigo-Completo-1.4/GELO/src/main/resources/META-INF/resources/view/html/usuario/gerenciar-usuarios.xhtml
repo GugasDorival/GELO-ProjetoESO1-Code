@@ -3,17 +3,17 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core">
 <f:metadata>
-    <f:event type="preRenderView" listener="#{loginBean.exigirAdministrador}" />
+    <f:event type="preRenderView" listener="#{entrarBean.exigirAdministrador}" />
     <f:event type="preRenderView" listener="#{usuarioBean.carregarUsuarios}" />
 </f:metadata>
 <h:head>
     <title>Gerenciar usuários | GELO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
 </h:head>
 <h:body>
 
-<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/home.xhtml">GELO</a></header>
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/view/html/usuario/perfil.xhtml">GELO</a></header>
 <main>
     <section class="card">
         <h1>Gerenciar usuários</h1>
@@ -68,9 +68,9 @@
                         <f:facet name="header">Ações</f:facet>
                         <div class="actions">
                             <h:commandButton value="Editar" action="#{usuarioBean.selecionarParaEditar(usuario.id)}"
-                                             styleClass="secondary" disabled="#{usuario.id eq loginBean.idUsuarioLogado}" />
+                                             styleClass="secondary" disabled="#{usuario.id eq entrarBean.idUsuarioLogado}" />
                             <h:commandButton value="Excluir" action="#{usuarioBean.excluirUsuario(usuario.id)}"
-                                             styleClass="danger" disabled="#{usuario.id eq loginBean.idUsuarioLogado}"
+                                             styleClass="danger" disabled="#{usuario.id eq entrarBean.idUsuarioLogado}"
                                              onclick="return confirm('Deseja realmente excluir esta conta?');" />
                         </div>
                     </h:column>
@@ -106,7 +106,7 @@
     </h:panelGroup>
 
     <section class="card">
-        <h:link outcome="home" value="Voltar para a página inicial" styleClass="button secondary" />
+        <h:link outcome="/view/html/usuario/perfil" value="Voltar para a página inicial" styleClass="button secondary" />
     </section>
 </main>
 <footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>

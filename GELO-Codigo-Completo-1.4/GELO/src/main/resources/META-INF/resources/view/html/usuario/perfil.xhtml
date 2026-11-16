@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{entrarBean.exigirAutenticacao}" />
+</f:metadata>
+<h:head>
+    <title>Página inicial | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
+</h:head>
+<h:body>
+
+<header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/view/html/usuario/perfil.xhtml">GELO</a></header>
+<main>
+    <section class="card">
+        <h1>Olá, <h:outputText value="#{entrarBean.usuarioLogado.nome}" />!</h1>
+        <p>Você está conectado ao GELO. A partir daqui, você pode acessar sua conta e gerenciar os usuários de acordo com seu perfil.</p>
+        <p>Perfil: <span class="badge"><h:outputText value="#{entrarBean.usuarioLogado.tipoUsuario}" /></span></p>
+        <div class="links">
+            <h:link outcome="/view/html/usuario/gerenciar-conta" value="Minha conta" />
+            <h:panelGroup rendered="#{entrarBean.administrador}">
+                <h:link outcome="/view/html/usuario/gerenciar-usuarios" value="Gerenciar usuários" />
+            </h:panelGroup>
+        </div>
+        <h:form>
+            <h:commandButton value="Sair" action="#{entrarBean.sair}" styleClass="secondary" />
+        </h:form>
+    </section>
+    <section class="card">
+        <h2>Buscar livros</h2>
+        <p class="muted">Pesquise por título ou autor e descubra livros para a sua próxima leitura.</p>
+        <h:form id="buscaForm" styleClass="search-form">
+            <div class="field search-term">
+                <h:outputLabel for="termo" value="Título ou autor" />
+                <h:inputText id="termo" value="#{livroBean.termo}" required="true"
+                             requiredMessage="Digite o nome de um livro ou de um autor." maxlength="120" />
+                <h:message for="termo" />
+            </div>
+            <div class="field search-type">
+                <h:outputLabel for="tipo" value="Buscar por" />
+                <h:selectOneMenu id="tipo" value="#{livroBean.tipo}">
+                    <f:selectItems value="#{livroBean.tipos}" var="t" itemValue="#{t.name()}" itemLabel="#{t.rotulo}" />
+                </h:selectOneMenu>
+            </div>
+            <div class="search-submit">
+                <h:commandButton value="Pesquisar" action="#{livroBean.pesquisar}" />
+            </div>
+        </h:form>
+    </section>
+</main>
+<footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>

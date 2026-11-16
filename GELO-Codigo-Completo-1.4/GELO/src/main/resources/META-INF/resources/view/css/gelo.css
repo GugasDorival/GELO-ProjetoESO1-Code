@@ -228,3 +228,25 @@ footer.site-footer {
 @media (max-width: 600px) {
     footer.site-footer { padding: 18px 16px; }
 }
+
+
+/* Busca de livros (Google Books) */
+select {
+    width: 100%; border: 1px solid #aebfb6; border-radius: 8px; padding: 10px 12px;
+    font: inherit; background: #fff; color: var(--gelo-text);
+}
+select:focus { outline: 3px solid #c3e1d3; border-color: var(--gelo-green); }
+.search-form { display: flex; flex-wrap: wrap; gap: 12px 14px; align-items: flex-start; }
+.search-form .field { margin-bottom: 0; }
+.search-term { flex: 1 1 280px; }
+.search-type { flex: 0 1 170px; }
+.search-submit { padding-top: 29px; }
+.book-list { list-style: none; margin: 0; padding: 0; }
+.book-item { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--gelo-border); }
+.book-item:last-child { border-bottom: 0; }
+.book-cover { flex: 0 0 64px; width: 64px; height: 96px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gelo-border); background: #edf4f0; }
+.book-cover-empty { display: flex; align-items: center; justify-content: center; text-align: center; font-size: .72rem; color: var(--gelo-muted); }
+.book-info h3 { font-size: 1.05rem; margin-bottom: 4px; }
+.book-info p { margin: 0 0 2px; }
+.book-author { font-weight: 600; color: var(--gelo-green-dark); }
+@media (max-width: 600px) { .search-submit { padding-top: 0; width: 100%; } }

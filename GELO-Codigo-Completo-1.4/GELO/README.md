@@ -21,7 +21,7 @@ Aplicação web GELO com os casos de uso **Manter usuário** e **Login**, alinha
 4. Depois de `BUILD SUCCESS`, clique com o botão direito no projeto e selecione **Run**. O arquivo `nbactions.xml` vincula a ação Run Project às metas `process-classes` e `spring-boot:run`, evitando a configuração genérica `exec:exec`.
 5. Na primeira execução, o Maven pode baixar dependências; aguarde a inicialização do servidor na janela **Output**.
 
-O projeto usa Spring Boot com Tomcat embutido. Não o copie para a pasta `webapps` de uma instalação externa do Tomcat 9. Depois de iniciar, abra <http://localhost:8081/>. A raiz mostra a página pública inicial; use **Entrar** para ir ao login ou **Criar conta** para abrir o cadastro. O mapeamento JSF também é configurado para atender a `/login.xhtml` e `/faces/login.xhtml`.
+O projeto usa Spring Boot com Tomcat embutido. Não o copie para a pasta `webapps` de uma instalação externa do Tomcat 9. Depois de iniciar, abra <http://localhost:8081/>. A raiz mostra a página pública inicial; use **Entrar** para ir ao login ou **Criar conta** para abrir o cadastro. O mapeamento JSF também é configurado para atender a `/view/html/usuario/entrar.xhtml` e `/faces/view/html/usuario/entrar.xhtml`.
 
 Se o NetBeans já tiver uma ação personalizada de Run armazenada localmente, confira em **Project Properties > Actions > Run project** se o campo **Execute Goals** está como `process-classes spring-boot:run` e deixe **Set Properties** vazio.
 
@@ -82,7 +82,7 @@ Alternativamente, configure o perfil ativo pela variável `SPRING_PROFILES_ACTIV
 - `UsuarioDTO`: apresenta os dados de conta para as telas sem expor a senha.
 - `UsuarioRepository`: operações de persistência JPA.
 - `UsuarioService`: regras de cadastro, autenticação, edição e exclusão.
-- `UsuarioBean` e `LoginBean`: comportamentos acionados pelas páginas JSF.
+- `UsuarioBean` e `EntrarBean`: comportamentos acionados pelas páginas JSF.
 
 O código anterior combinava Jakarta EE 10 com bibliotecas antigas de JSF, CDI e Hibernate e usava o `id` de forma inconsistente. A versão atual unifica a aplicação em Spring Boot + JoinFaces e corrige o mapeamento do identificador e da enumeração de perfil. As contas criadas no formulário normal são sempre `LEITOR`; o administrador inicial é criado pela configuração para que seja possível acessar as funções administrativas no primeiro uso.
 

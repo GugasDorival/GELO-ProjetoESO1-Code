@@ -5,7 +5,7 @@
 <h:head>
     <title>Criar conta | GELO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/css/gelo.css" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
 </h:head>
 <h:body>
 <header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a></header>
@@ -35,7 +35,7 @@
             </div>
             <div class="actions">
                 <h:commandButton value="Criar conta" action="#{usuarioBean.registrarLeitor}" />
-                <h:link outcome="login" value="Voltar ao login" styleClass="button secondary" />
+                <h:link outcome="/view/html/usuario/entrar" value="Voltar ao login" styleClass="button secondary" />
             </div>
         </h:form>
     </section>

@@ -19,7 +19,7 @@ import java.util.List;
 public class UsuarioBean {
 
     private final UsuarioService usuarioService;
-    private final LoginBean loginBean;
+    private final EntrarBean entrarBean;
 
     // Campos usados no cadastro público e no cadastro de leitores pelo administrador.
     private String novoNome;
@@ -40,19 +40,18 @@ public class UsuarioBean {
 
     private List<UsuarioDTO> usuarios = new ArrayList<>();
 
-    public UsuarioBean(UsuarioService usuarioService, LoginBean loginBean) {
+    public UsuarioBean(UsuarioService usuarioService, EntrarBean entrarBean) {
         this.usuarioService = usuarioService;
-        this.loginBean = loginBean;
+        this.entrarBean = entrarBean;
     }
 
-    /** Cadastro público: sempre cria uma conta de LEITOR. */
     public String registrarLeitor() {
         try {
             usuarioService.criarLeitor(novoNome, novoEmail, novaSenha);
             limparNovoUsuario();
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
             mensagem(FacesMessage.SEVERITY_INFO, "Conta criada com sucesso. Entre com seu e-mail e senha.");
-            return "/login.xhtml?faces-redirect=true";
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
             novaSenha = null;
             mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
@@ -62,7 +61,7 @@ public class UsuarioBean {
 
     /** O administrador também pode cadastrar leitores, mas não promover contas a administrador. */
     public String criarLeitorPeloAdministrador() {
-        if (!loginBean.isAdministrador()) {
+        if (!entrarBean.isAdministrador()) {
             mensagem(FacesMessage.SEVERITY_ERROR, "Somente um administrador pode cadastrar usuários nesta tela.");
             return null;
         }
@@ -83,8 +82,8 @@ public class UsuarioBean {
         if (FacesContext.getCurrentInstance().getResponseComplete()) {
             return;
         }
-        if (!loginBean.isAdministrador()) {
-            redirecionar(loginBean.getUsuarioLogado() == null ? "/login.xhtml" : "/home.xhtml");
+        if (!entrarBean.isAdministrador()) {
+            redirecionar(entrarBean.getUsuarioLogado() == null ? "/view/html/usuario/entrar.xhtml" : "/view/html/usuario/perfil.xhtml");
             return;
         }
         carregarListaInterna();
@@ -95,11 +94,11 @@ public class UsuarioBean {
     }
 
     public String selecionarParaEditar(Integer id) {
-        if (!loginBean.isAdministrador()) {
+        if (!entrarBean.isAdministrador()) {
             mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
             return null;
         }
-        if (id != null && id.equals(loginBean.getIdUsuarioLogado())) {
+        if (id != null && id.equals(entrarBean.getIdUsuarioLogado())) {
             mensagem(FacesMessage.SEVERITY_WARN, "Para editar sua própria conta, utilize a opção Minha conta.");
             return null;
         }
@@ -121,7 +120,7 @@ public class UsuarioBean {
     }
 
     public String salvarEdicaoAdministrativa() {
-        if (!loginBean.isAdministrador()) {
+        if (!entrarBean.isAdministrador()) {
             mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
             return null;
         }
@@ -131,7 +130,7 @@ public class UsuarioBean {
         }
         try {
             usuarioService.atualizar(usuarioEditandoId, nomeEdicao, emailEdicao, senhaEdicao,
-                    loginBean.getIdUsuarioLogado(), true);
+                    entrarBean.getIdUsuarioLogado(), true);
             limparEdicaoAdministrativa();
             carregarListaInterna();
             mensagem(FacesMessage.SEVERITY_INFO, "Conta atualizada com sucesso.");
@@ -155,12 +154,12 @@ public class UsuarioBean {
     }
 
     public String excluirUsuario(Integer id) {
-        if (!loginBean.isAdministrador()) {
+        if (!entrarBean.isAdministrador()) {
             mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
             return null;
         }
         try {
-            usuarioService.excluir(id, loginBean.getIdUsuarioLogado(), true);
+            usuarioService.excluir(id, entrarBean.getIdUsuarioLogado(), true);
             if (id != null && id.equals(usuarioEditandoId)) {
                 limparEdicaoAdministrativa();
             }
@@ -176,14 +175,14 @@ public class UsuarioBean {
         if (FacesContext.getCurrentInstance().getResponseComplete()) {
             return;
         }
-        UsuarioDTO atual = loginBean.getUsuarioLogado();
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
         if (atual == null) {
-            redirecionar("/login.xhtml");
+            redirecionar("/view/html/usuario/entrar.xhtml");
             return;
         }
         Integer id = atual.id();
         if (id == null) {
-            redirecionar("/login.xhtml");
+            redirecionar("/view/html/usuario/entrar.xhtml");
             return;
         }
         if (!id.equals(contaCarregadaPara)) {
@@ -196,14 +195,14 @@ public class UsuarioBean {
     }
 
     public String salvarMinhaConta() {
-        UsuarioDTO atual = loginBean.getUsuarioLogado();
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
         if (atual == null) {
-            return "/login.xhtml?faces-redirect=true";
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
         }
         try {
             UsuarioDTO atualizado = usuarioService.atualizar(atual.id(), nomeConta, emailConta, senhaConta,
                     atual.id(), false);
-            loginBean.atualizarUsuarioLogado(atualizado);
+            entrarBean.atualizarUsuarioLogado(atualizado);
             nomeConta = atualizado.nome();
             emailConta = atualizado.email();
             senhaConta = "";
@@ -217,13 +216,13 @@ public class UsuarioBean {
     }
 
     public String excluirMinhaConta() {
-        UsuarioDTO atual = loginBean.getUsuarioLogado();
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
         if (atual == null) {
-            return "/login.xhtml?faces-redirect=true";
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
         }
         try {
             usuarioService.excluir(atual.id(), atual.id(), false);
-            return loginBean.sair();
+            return entrarBean.sair();
         } catch (IllegalArgumentException ex) {
             mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
             return null;

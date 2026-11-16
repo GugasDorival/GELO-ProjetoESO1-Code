@@ -42,7 +42,7 @@
             <artifactId>faces-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring MVC para registrar controladores HTTP como HomeController. -->
+        <!-- Spring MVC para registrar controladores HTTP. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

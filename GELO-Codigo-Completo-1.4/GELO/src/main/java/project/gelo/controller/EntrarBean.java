@@ -14,9 +14,9 @@ import project.gelo.service.UsuarioService;
 
 import java.io.IOException;
 
-@Component("loginBean")
+@Component("entrarBean")
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class LoginBean {
+public class EntrarBean {
 
     private final UsuarioService usuarioService;
 
@@ -24,7 +24,7 @@ public class LoginBean {
     private String senha;
     private UsuarioDTO usuarioLogado;
 
-    public LoginBean(UsuarioService usuarioService) {
+    public EntrarBean(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
@@ -36,7 +36,7 @@ public class LoginBean {
                 httpServletRequest.changeSessionId();
             }
             senha = null;
-            return "/home.xhtml?faces-redirect=true";
+            return "/view/html/usuario/perfil.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
             senha = null;
             adicionarMensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
@@ -46,20 +46,20 @@ public class LoginBean {
 
     public String sair() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "/login.xhtml?faces-redirect=true";
+        return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
     }
 
     public void exigirAutenticacao(ComponentSystemEvent event) {
         if (usuarioLogado == null) {
-            redirecionar("/login.xhtml");
+            redirecionar("/view/html/usuario/entrar.xhtml");
         }
     }
 
     public void exigirAdministrador(ComponentSystemEvent event) {
         if (usuarioLogado == null) {
-            redirecionar("/login.xhtml");
+            redirecionar("/view/html/usuario/entrar.xhtml");
         } else if (!isAdministrador()) {
-            redirecionar("/home.xhtml");
+            redirecionar("/view/html/usuario/perfil.xhtml");
         }
     }
 
