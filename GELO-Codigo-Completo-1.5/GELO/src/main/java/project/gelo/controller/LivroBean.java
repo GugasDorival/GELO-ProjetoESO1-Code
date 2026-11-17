@@ -33,7 +33,6 @@ public class LivroBean {
         this.googleBooksService = googleBooksService;
     }
 
-    /** Ação do formulário: redireciona para a página de resultados levando termo e tipo na URL.*/
     public String pesquisar() {
         return "/view/html/livro/buscar.xhtml?faces-redirect=true&includeViewParams=true";
     }
@@ -51,6 +50,8 @@ public class LivroBean {
             contexto.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }
+
+    public void livroSelecionado(ComponentSystemEvent event){}
 
     public String getTermo() { return termo; }
     public void setTermo(String termo) { this.termo = termo == null ? null : termo.trim(); }

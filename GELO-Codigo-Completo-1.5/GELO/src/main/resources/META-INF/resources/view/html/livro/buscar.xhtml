@@ -6,6 +6,8 @@
 <f:metadata>
     <f:viewParam name="termo" value="#{livroBean.termo}" />
     <f:viewParam name="tipo" value="#{livroBean.tipo}" />
+    <f:viewParam name="livroTitulo" value="#{livro.titulo}" />
+    <f:viewParam name="livroCapa" value="#{livro.urlCapa}" />
     <f:event type="preRenderView" listener="#{entrarBean.exigirAutenticacao}" />
     <f:event type="preRenderView" listener="#{livroBean.carregarResultados}" />
 </f:metadata>
@@ -52,15 +54,20 @@
                 <ui:repeat value="#{livroBean.resultados}" var="livro">
                     <li class="book-item">
                         <ui:fragment rendered="#{livro.possuiCapa}">
-                            <a href="livro.xhtml?faces-redirect=true">
-                                <img class="book-cover" src="#{livro.urlCapa}" alt="Capa de #{livro.titulo}"
-                                    loading="lazy" width="64" height="96" />
-                            </a>
+                            <h:link outcome="#{facesContext.externalContext.requestContextPath}/view/html/livro/livro.xhtml" includeViewParams="true">
+                                <f:param name="livroCapa" value="#{livro.urlCapa}"/>
+                                <f:param name="livroTitulo" value="#{livro.titulo}"/>
+
+                                <img class="book-cover" src="#{livro.urlCapa}" alt="Capa de #{livro.titulo}" loading="lazy" width="74" height="106" />
+                            </h:link>   
                         </ui:fragment>
                         <ui:fragment rendered="#{not livro.possuiCapa}">
-                            <a href="livro.xhtml?faces-redirect=true">
-                                <div class="book-cover book-cover-empty" aria-hidden="true">Sem capa</div>
-                            </a>
+
+                            <h:link outcome="#{facesContext.externalContext.requestContextPath}/view/html/livro/livro.xhtml" includeViewParams="true">
+                                    <f:param name="livroTitulo" value="#{livro.titulo}"/>
+
+                                    <div class="book-cover book-cover-empty" aria-hidden="true">Sem capa</div>
+                            </h:link>
                         </ui:fragment>
                         <div class="book-info">
                             <h3><h:outputText value="#{livro.titulo}" /></h3>
