@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(properties = {
-    "spring.datasource.url=jdbc:h2:mem:gelotest;DB_CLOSE_DELAY=-1",
-    "spring.datasource.driver-class-name=org.h2.Driver",
+    "spring.datasource.url=jdbc:sqlite:./target/gelo-teste.db?foreign_keys=on",
     "spring.jpa.hibernate.ddl-auto=create-drop",
     "gelo.bootstrap-admin.enabled=false"
 })

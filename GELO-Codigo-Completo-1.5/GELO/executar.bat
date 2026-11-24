@@ -13,6 +13,6 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Iniciando GELO em http://localhost:8080/
+echo Iniciando GELO em http://localhost:8081/
 mvn spring-boot:run
 endlocal
