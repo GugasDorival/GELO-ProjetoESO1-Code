@@ -1,0 +1,272 @@
+package project.gelo.controller;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ComponentSystemEvent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.context.annotation.ScopedProxyMode;
+import project.gelo.dto.UsuarioDTO;
+import project.gelo.service.UsuarioService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component("usuarioBean")
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UsuarioBean {
+
+    private final UsuarioService usuarioService;
+    private final EntrarBean entrarBean;
+
+    // Campos usados no cadastro público e no cadastro de leitores pelo administrador.
+    private String novoNome;
+    private String novoEmail;
+    private String novaSenha;
+
+    // Campos do formulário de edição (Minha conta ou usuário selecionado pelo administrador).
+    private String nomeEdicao;
+    private String emailEdicao;
+    private String senhaEdicao;
+    private Integer usuarioEditandoId;
+
+    // Campos separados para que Minha conta não interfira no formulário de edição administrativa.
+    private String nomeConta;
+    private String emailConta;
+    private String senhaConta;
+    private Integer contaCarregadaPara;
+
+    private List<UsuarioDTO> usuarios = new ArrayList<>();
+
+    public UsuarioBean(UsuarioService usuarioService, EntrarBean entrarBean) {
+        this.usuarioService = usuarioService;
+        this.entrarBean = entrarBean;
+    }
+
+    public String registrarLeitor() {
+        try {
+            usuarioService.criarLeitor(novoNome, novoEmail, novaSenha);
+            limparNovoUsuario();
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            mensagem(FacesMessage.SEVERITY_INFO, "Conta criada com sucesso. Entre com seu e-mail e senha.");
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
+        } catch (IllegalArgumentException ex) {
+            novaSenha = null;
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+            return null;
+        }
+    }
+
+    /** O administrador também pode cadastrar leitores, mas não promover contas a administrador. */
+    public String criarLeitorPeloAdministrador() {
+        if (!entrarBean.isAdministrador()) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Somente um administrador pode cadastrar usuários nesta tela.");
+            return null;
+        }
+        try {
+            usuarioService.criarLeitor(novoNome, novoEmail, novaSenha);
+            limparNovoUsuario();
+            carregarListaInterna();
+            mensagem(FacesMessage.SEVERITY_INFO, "Conta de leitor criada com sucesso.");
+            return null;
+        } catch (IllegalArgumentException ex) {
+            novaSenha = null;
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+            return null;
+        }
+    }
+
+    public void carregarUsuarios(ComponentSystemEvent event) {
+        if (FacesContext.getCurrentInstance().getResponseComplete()) {
+            return;
+        }
+        if (!entrarBean.isAdministrador()) {
+            redirecionar(entrarBean.getUsuarioLogado() == null ? "/view/html/usuario/entrar.xhtml" : "/view/html/usuario/perfil.xhtml");
+            return;
+        }
+        carregarListaInterna();
+    }
+
+    private void carregarListaInterna() {
+        usuarios = usuarioService.listarTodos();
+    }
+
+    public String selecionarParaEditar(Integer id) {
+        if (!entrarBean.isAdministrador()) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
+            return null;
+        }
+        if (id != null && id.equals(entrarBean.getIdUsuarioLogado())) {
+            mensagem(FacesMessage.SEVERITY_WARN, "Para editar sua própria conta, utilize a opção Minha conta.");
+            return null;
+        }
+        if (id == null) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Selecione uma conta válida.");
+            return null;
+        }
+
+        try {
+            UsuarioDTO usuario = usuarioService.buscarPorId(id);
+            usuarioEditandoId = usuario.id();
+            nomeEdicao = usuario.nome();
+            emailEdicao = usuario.email();
+            senhaEdicao = "";
+        } catch (IllegalArgumentException ex) {
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+        }
+        return null;
+    }
+
+    public String salvarEdicaoAdministrativa() {
+        if (!entrarBean.isAdministrador()) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
+            return null;
+        }
+        if (usuarioEditandoId == null) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Selecione uma conta antes de salvar.");
+            return null;
+        }
+        try {
+            usuarioService.atualizar(usuarioEditandoId, nomeEdicao, emailEdicao, senhaEdicao,
+                    entrarBean.getIdUsuarioLogado(), true);
+            limparEdicaoAdministrativa();
+            carregarListaInterna();
+            mensagem(FacesMessage.SEVERITY_INFO, "Conta atualizada com sucesso.");
+        } catch (IllegalArgumentException ex) {
+            senhaEdicao = "";
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+        }
+        return null;
+    }
+
+    public String cancelarEdicaoAdministrativa() {
+        limparEdicaoAdministrativa();
+        return null;
+    }
+
+    private void limparEdicaoAdministrativa() {
+        usuarioEditandoId = null;
+        nomeEdicao = null;
+        emailEdicao = null;
+        senhaEdicao = null;
+    }
+
+    public String excluirUsuario(Integer id) {
+        if (!entrarBean.isAdministrador()) {
+            mensagem(FacesMessage.SEVERITY_ERROR, "Acesso permitido somente a administradores.");
+            return null;
+        }
+        try {
+            usuarioService.excluir(id, entrarBean.getIdUsuarioLogado(), true);
+            if (id != null && id.equals(usuarioEditandoId)) {
+                limparEdicaoAdministrativa();
+            }
+            carregarListaInterna();
+            mensagem(FacesMessage.SEVERITY_INFO, "Conta excluída com sucesso.");
+        } catch (IllegalArgumentException ex) {
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+        }
+        return null;
+    }
+
+    public void carregarMinhaConta(ComponentSystemEvent event) {
+        if (FacesContext.getCurrentInstance().getResponseComplete()) {
+            return;
+        }
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
+        if (atual == null) {
+            redirecionar("/view/html/usuario/entrar.xhtml");
+            return;
+        }
+        Integer id = atual.id();
+        if (id == null) {
+            redirecionar("/view/html/usuario/entrar.xhtml");
+            return;
+        }
+        if (!id.equals(contaCarregadaPara)) {
+            UsuarioDTO dados = usuarioService.buscarPorId(id);
+            nomeConta = dados.nome();
+            emailConta = dados.email();
+            senhaConta = "";
+            contaCarregadaPara = dados.id();
+        }
+    }
+
+    public String salvarMinhaConta() {
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
+        if (atual == null) {
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
+        }
+        try {
+            UsuarioDTO atualizado = usuarioService.atualizar(atual.id(), nomeConta, emailConta, senhaConta,
+                    atual.id(), false);
+            entrarBean.atualizarUsuarioLogado(atualizado);
+            nomeConta = atualizado.nome();
+            emailConta = atualizado.email();
+            senhaConta = "";
+            mensagem(FacesMessage.SEVERITY_INFO, "Sua conta foi atualizada com sucesso.");
+            return null;
+        } catch (IllegalArgumentException ex) {
+            senhaConta = "";
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+            return null;
+        }
+    }
+
+    public String excluirMinhaConta() {
+        UsuarioDTO atual = entrarBean.getUsuarioLogado();
+        if (atual == null) {
+            return "/view/html/usuario/entrar.xhtml?faces-redirect=true";
+        }
+        try {
+            usuarioService.excluir(atual.id(), atual.id(), false);
+            return entrarBean.sair();
+        } catch (IllegalArgumentException ex) {
+            mensagem(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+            return null;
+        }
+    }
+
+    private void limparNovoUsuario() {
+        novoNome = null;
+        novoEmail = null;
+        novaSenha = null;
+    }
+
+    private void mensagem(FacesMessage.Severity severidade, String texto) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severidade, texto, null));
+    }
+
+    private void redirecionar(String caminho) {
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        try {
+            contexto.getExternalContext().redirect(contexto.getExternalContext().getRequestContextPath() + caminho);
+            contexto.responseComplete();
+        } catch (IOException ex) {
+            throw new IllegalStateException("Não foi possível redirecionar a página.", ex);
+        }
+    }
+
+    public String getNovoNome() { return novoNome; }
+    public void setNovoNome(String novoNome) { this.novoNome = novoNome; }
+    public String getNovoEmail() { return novoEmail; }
+    public void setNovoEmail(String novoEmail) { this.novoEmail = novoEmail; }
+    public String getNovaSenha() { return novaSenha; }
+    public void setNovaSenha(String novaSenha) { this.novaSenha = novaSenha; }
+    public String getNomeEdicao() { return nomeEdicao; }
+    public void setNomeEdicao(String nomeEdicao) { this.nomeEdicao = nomeEdicao; }
+    public String getEmailEdicao() { return emailEdicao; }
+    public void setEmailEdicao(String emailEdicao) { this.emailEdicao = emailEdicao; }
+    public String getSenhaEdicao() { return senhaEdicao; }
+    public void setSenhaEdicao(String senhaEdicao) { this.senhaEdicao = senhaEdicao; }
+    public Integer getUsuarioEditandoId() { return usuarioEditandoId; }
+    public String getNomeConta() { return nomeConta; }
+    public void setNomeConta(String nomeConta) { this.nomeConta = nomeConta; }
+    public String getEmailConta() { return emailConta; }
+    public void setEmailConta(String emailConta) { this.emailConta = emailConta; }
+    public String getSenhaConta() { return senhaConta; }
+    public void setSenhaConta(String senhaConta) { this.senhaConta = senhaConta; }
+    public List<UsuarioDTO> getUsuarios() { return usuarios; }
+}
