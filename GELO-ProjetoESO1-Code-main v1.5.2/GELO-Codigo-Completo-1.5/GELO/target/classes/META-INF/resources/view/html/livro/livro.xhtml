@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<f:metadata>
+    <f:event type="preRenderView" listener="#{entrarBean.exigirAutenticacao}" />
+    <f:event type="preRenderView" listener="#{livroBean.carregarResultados}" />
+</f:metadata>
+
+<h:head>
+    <title> #{livro.titulo} | GELO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/view/css/gelo.css" />
+</h:head>
+<h:body>
+
+    <header><a class="brand" href="#{facesContext.externalContext.requestContextPath}/view/html/usuario/perfil.xhtml">GELO</a></header>
+
+    <main>
+        <h1>Informações e resenhas sobre #{livro.titulo}</h1>
+        <section class="card">
+            <li class="book-item">
+                <ui:fragment rendered="#{livro.possuiCapa}">
+                    <a href="livro.xhtml?faces-redirect=true">
+                        <img class="book-cover" src="#{livro.urlCapa}" alt="Capa de #{livro.titulo}" loading="lazy" width="64" height="96" />
+                    </a>
+                </ui:fragment>
+                <ui:fragment rendered="#{not livro.possuiCapa}">
+                    <a href="livro.xhtml?faces-redirect=true">
+                        <div class="book-cover book-cover-empty" aria-hidden="true">Sem capa</div>
+                    </a>
+                </ui:fragment>
+                <div class="book-info">
+                    <h3><h:outputText value="#{livro.titulo}" /></h3>
+                </div>
+            </li>
+        </section>
+    </main>
+
+    <footer class="site-footer"><a class="footer-brand" href="#{facesContext.externalContext.requestContextPath}/" aria-label="GELO — página inicial">GELO</a><span class="site-footer-separator">·</span><span>Gerenciamento Eletrônico de Livros e Opiniões</span></footer>
+</h:body>
+</html>
