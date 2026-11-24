@@ -9,8 +9,7 @@ Aplicação web GELO com os casos de uso **Manter usuário** e **Login**, alinha
 - Spring Boot 3.5.x
 - Jakarta Faces (JSF) integrado com Spring Boot por meio do JoinFaces
 - Spring Data JPA / Hibernate
-- H2 para execução local sem instalar um servidor de banco de dados
-- PostgreSQL opcional
+- SQLite para execução local sem instalar um servidor de banco de dados
 - BCrypt para armazenar senhas com hash
 
 ## Abrir e executar pelo NetBeans
@@ -59,15 +58,9 @@ Depois de entrar como administrador, abra **Gerenciar usuários** para listar, c
 - Não é possível excluir o último administrador.
 - O DTO usado pelas páginas não inclui senha ou hash.
 
-## Persistência padrão (H2)
+## Persistência padrão (SQLite)
 
-Por padrão, o aplicativo usa um banco H2 em arquivo na pasta `data`, então os usuários permanecem entre reinicializações. O esquema é atualizado com Hibernate (`spring.jpa.hibernate.ddl-auto=update`). Para reiniciar o banco de demonstração do zero, pare a aplicação e apague os arquivos `data/gelodb.mv.db` e `data/gelodb.trace.db`, se existirem. Ao iniciar novamente, o administrador inicial será criado outra vez.
-
-## Usar PostgreSQL opcionalmente
-
-1. Crie um banco chamado `gelodb` no PostgreSQL.
-2. Configure as variáveis de ambiente `GELO_DB_URL`, `GELO_DB_USER` e `GELO_DB_PASSWORD`.
-3. Inicie com o perfil `postgres`:
+Por padrão, o aplicativo usa um banco SQLite em arquivo na pasta `data`, então os usuários permanecem entre reinicializações. O esquema é atualizado com Hibernate (`spring.jpa.hibernate.ddl-auto=update`). Para reiniciar o banco de demonstração do zero, pare a aplicação e apague os arquivos `data/gelo.db`, se existirem. Ao iniciar novamente, o administrador inicial será criado outra vez.
 
 ```powershell
 mvn spring-boot:run "-Dspring-boot.run.profiles=postgres"
